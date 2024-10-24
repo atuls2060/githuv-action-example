@@ -1,0 +1,8 @@
+name: Github Action Lint
+run-name: ${{github.actor}} is running Lint action
+on: [push]
+jobs:
+  Lint-Github-Action:
+    runs-on: ubuntu-latest
+    steps:
+       - run: echo "hello"
