@@ -1,0 +1,38 @@
+name: Deploy to Netlify
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+    
+    - name: Install dependencies
+      run: |
+        npm install
+    
+    - name: Build React App
+      run: |
+        npm run build
+    
+    - name: Deploy to Netlify
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      run: |
+        curl -sL https://github.com/netlify/cli/releases/download/v3.0.0/netlify-cli-linux-x64.tar.gz | tar xz
+        ./netlify-cli/netlify deploy --prod --dir=build --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN
